@@ -84,19 +84,19 @@ public class CandidateController {
 
         try {
             if (filter != null) {
-            // model.addAttribute("jobs", filter);
-            this.findJobsService.execute(getToken(), filter);
+                var jobs = this.findJobsService.execute(getToken(), filter);
+                model.addAttribute("jobs", jobs);
             }
-        }catch(HttpClientErrorException e) {
+        } catch (HttpClientErrorException e) {
             return "redirect:/candidate/login";
         }
-        
+
 
         return "candidate/jobs";
     }
 
     private String getToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-         return authentication.getDetails().toString();   
+        return authentication.getDetails().toString();
     }
 }
