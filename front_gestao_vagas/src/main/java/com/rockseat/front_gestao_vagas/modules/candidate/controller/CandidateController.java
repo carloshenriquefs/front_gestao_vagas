@@ -1,5 +1,6 @@
 package com.rockseat.front_gestao_vagas.modules.candidate.controller;
 
+import com.rockseat.front_gestao_vagas.modules.candidate.service.ApplyJobService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.CandidateService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.FindJobsService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.ProfileCandidateService;
@@ -16,8 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/candidate")
@@ -31,6 +35,9 @@ public class CandidateController {
 
     @Autowired
     private FindJobsService findJobsService;
+
+    @Autowired
+    private ApplyJobService applyJobService;
 
     @GetMapping("/login")
     public String login() {
@@ -90,9 +97,15 @@ public class CandidateController {
         } catch (HttpClientErrorException e) {
             return "redirect:/candidate/login";
         }
-
-
         return "candidate/jobs";
+    }
+
+    @PostMapping("/jobs/apply")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public String applyJob(@RequestParam("jobId") UUID jobId) {
+        this.applyJobService.execute(getToken(), jobId);
+
+        return "redirect:/candidate/jobs";
     }
 
     private String getToken() {
