@@ -1,5 +1,6 @@
 package com.rockseat.front_gestao_vagas.modules.candidate.controller;
 
+import com.rockseat.front_gestao_vagas.modules.candidate.dto.CreateCandidateDTO;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.ApplyJobService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.CandidateService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.FindJobsService;
@@ -42,11 +43,6 @@ public class CandidateController {
     @GetMapping("/login")
     public String login() {
         return "candidate/login";
-    }
-
-    @GetMapping("/create")
-    public String create() {
-        return "candidate/create";
     }
 
     @PostMapping("/signIn")
@@ -111,6 +107,18 @@ public class CandidateController {
         this.applyJobService.execute(getToken(), jobId);
 
         return "redirect:/candidate/jobs";
+    }
+
+    @GetMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("candidate", new CreateCandidateDTO());
+        return "candidate/create";
+    }
+
+    @PostMapping("/create")
+    public String save(CreateCandidateDTO candidate, Model model) {
+        model.addAttribute("candidate", candidate);
+        return "candidate/create";
     }
 
     private String getToken() {
