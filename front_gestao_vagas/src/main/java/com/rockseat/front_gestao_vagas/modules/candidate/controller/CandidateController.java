@@ -3,6 +3,7 @@ package com.rockseat.front_gestao_vagas.modules.candidate.controller;
 import com.rockseat.front_gestao_vagas.modules.candidate.dto.CreateCandidateDTO;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.ApplyJobService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.CandidateService;
+import com.rockseat.front_gestao_vagas.modules.candidate.service.CreateCandidateService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.FindJobsService;
 import com.rockseat.front_gestao_vagas.modules.candidate.service.ProfileCandidateService;
 import jakarta.servlet.http.HttpSession;
@@ -39,6 +40,9 @@ public class CandidateController {
 
     @Autowired
     private ApplyJobService applyJobService;
+
+    @Autowired
+    private CreateCandidateService createCandidateService;
 
     @GetMapping("/login")
     public String login() {
@@ -117,6 +121,13 @@ public class CandidateController {
 
     @PostMapping("/create")
     public String save(CreateCandidateDTO candidate, Model model) {
+
+        try {
+            this.createCandidateService.execute(candidate);
+        } catch(HttpClientErrorException ex) {
+            model.addAttribute("error_message", ex.getLocalizedMessage());
+        }
+
         model.addAttribute("candidate", candidate);
         return "candidate/create";
     }
