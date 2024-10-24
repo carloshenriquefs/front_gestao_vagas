@@ -1,6 +1,5 @@
 package com.rockseat.front_gestao_vagas.modules.company.service;
 
-import com.rockseat.front_gestao_vagas.modules.candidate.dto.Token;
 import com.rockseat.front_gestao_vagas.modules.company.dto.CreateJobsDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
