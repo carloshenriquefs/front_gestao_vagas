@@ -4,6 +4,7 @@ import com.rockseat.front_gestao_vagas.modules.company.dto.CreateCompanyDTO;
 import com.rockseat.front_gestao_vagas.modules.company.dto.CreateJobsDTO;
 import com.rockseat.front_gestao_vagas.modules.company.service.CreateCompanyService;
 import com.rockseat.front_gestao_vagas.modules.company.service.CreateJobsService;
+import com.rockseat.front_gestao_vagas.modules.company.service.ListAllJobsCompanyService;
 import com.rockseat.front_gestao_vagas.modules.company.service.LoginCompanyService;
 import com.rockseat.front_gestao_vagas.utils.FormatErrorMessage;
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +35,9 @@ public class CompanyController {
 
     @Autowired
     private CreateJobsService createJobsService;
+
+    @Autowired
+    private ListAllJobsCompanyService listAllJobsCompanyService;
 
     @GetMapping("/create")
     public String create(Model model) {
@@ -100,7 +104,9 @@ public class CompanyController {
     @GetMapping("/jobs/list")
     @PreAuthorize("hasRole('COMPANY')")
     public String list(Model model) {
-        //model.addAttribute("jobs", new CreateJobsDTO());
+        var result = this.listAllJobsCompanyService.execute(getToken());
+        model.addAttribute("jobs", result);
+        System.out.println(result);
         return "company/list";
     }
 
