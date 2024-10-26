@@ -1,6 +1,7 @@
 package com.rockseat.front_gestao_vagas.modules.company.service;
 
 import com.rockseat.front_gestao_vagas.modules.candidate.dto.JobDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,9 @@ import static org.springframework.http.HttpMethod.GET;
 @Service
 public class ListAllJobsCompanyService {
 
+    @Value("${host.api.gestao.vagas}")
+    private String hostAPIGestaoVagas;
+
     public List<JobDTO> execute(String token) {
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -23,7 +27,9 @@ public class ListAllJobsCompanyService {
 
         ParameterizedTypeReference<List<JobDTO>> responseType = new ParameterizedTypeReference<List<JobDTO>>() {};
 
-        var result = rt.exchange("http://localhost:8080/company/job/", GET, httpEntity, responseType);
+        var url = hostAPIGestaoVagas.concat("/company/job/");
+
+        var result = rt.exchange(url, GET, httpEntity, responseType);
 
         return result.getBody();
     }
